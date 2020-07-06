@@ -1,0 +1,23 @@
+{
+  "name": "team-thor",
+  "version": "1.0.0",
+  "description": "The weather app for the summer 2020 CS 361 team thor",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x00C0DE/Team-Thor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0x00C0DE/Team-Thor/issues"
+  },
+  "homepage": "https://github.com/0x00C0DE/Team-Thor#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
