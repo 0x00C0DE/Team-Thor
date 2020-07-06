@@ -5,5 +5,5 @@ Oregon State University - Summer 2020 - CS 361
 - Owen Haggerty
 - Braden Lee
 
-![GitHub Logo](/blob/master/2tier.png)
+![GitHub Logo](https://github.com/0x00C0DE/Team-Thor/blob/master/2tier.png)
 Format: ![Alt Text](url)
