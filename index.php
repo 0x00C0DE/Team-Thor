@@ -27,13 +27,13 @@
 				echo 'btn-success" href="./profile.php">';
 				$con = dbconnect();
 				$sql = "SELECT name FROM Account WHERE username='" . $_SESSION['user'] . "'";
-				$result = mysqli_fetch_array($result);
+				$result = mysqli_query($con,$sql);
 
 				if(mysqli_num_rows($result) == 1){
 					$row = mysqli_fetch_array($result);
 					echo $row['name'];
 				}
-				echo '</a><';
+				echo '</a>';
 				echo '<a class="btn btn-secondary" href="./logout.php">Log Out';
 			}
 			echo '</a>'
