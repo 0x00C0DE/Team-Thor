@@ -1,0 +1,12 @@
+.day-forecast-card{
+	background: #cccccc !important;
+}
+.weather-icon-div{
+	max-width: calc(100% - 5px);
+}
+.temp-max{
+	color: #dd7700;
+}
+.temp-min{
+	color: #3300ff;
+}
