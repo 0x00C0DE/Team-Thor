@@ -2,6 +2,7 @@
 <html dir="ltr" lang="en">
 <head>
 	<?php
+	session_save_path("./sessionDir");
 	if(!session_id()) @session_start();
 	require_once "./.dblogin.php";
 	?>
@@ -16,7 +17,7 @@
 <body>
   <div class="container-fluid w-100 bg-info">
 	  <h1 class="display-3 pt-2 text-center">Weather App</h1>
-	  <div class="container-md mx-auto d-flex flex-row justify-content-end">
+	  <div class="container-md mx-auto d-flex flex-row justify-content-end pb-2">
 		  <?php
 		  echo '<a class="btn mr-2 ';
 			if(!isset($_SESSION["loggedin"])) {
@@ -41,26 +42,73 @@
 		</div>
 	</div>
 
-	<div class="content bg-light container-md">
-		<div class="user-listing-preview">
-			<h3>Job Listings</h3>
-			<?php
-				$conn = dbconnect();
-				$sql = "SELECT * FROM `Account`";
-				$result = mysqli_query($conn, $sql);
+	<div class="mb-3">
+		<?php
+		ini_set('display_errors',1);
+		ini_set('display_startup_errors',1);
+		error_reporting(E_ALL);
+		//read api key from file
+		$apikeyfile = fopen("api_secret_key","r") or die("Could not open api key file");
+		$apikey = trim(fread($apikeyfile,filesize("api_secret_key")));
+		fclose($apikeyfile);
 
-				if(mysqli_num_rows($result) > 0) {
-					while($row = mysqli_fetch_array($result)) {
-						echo '<div class="user-listing-preview-item">';
-						echo '<h4>' . $row['username'] . '</h4>';
-						echo '<p>' . substr($row['psswrd'], 0, min(strlen($row['psswrd']), 30)) . '... </p>';
-						echo '<p>Salary: $' .$row['email'] . '. </p>';
-						echo '<p>Posted by ' . $row['name'] . ' on ' . date("l F j, Y", strtotime($row['date'])) . '.</p>';
-						echo "</div>";
-					}
-			 	}
-			 ?>
-		</div>
+		//temporary data for testing
+		$locations = array(array("locName" => "Corvallis","lat" => "44.578056","lon" => "-123.275278"));
+
+		for($i=0; $i<sizeof($locations); $i++){
+			//generate url for request
+			$apiurl = "https://api.openweathermap.org/data/2.5/onecall";
+			$apiurl .= "?lat=" . urlencode($locations[$i]["lat"]);
+			$apiurl .= "&lon=" . urlencode($locations[$i]["lon"]);
+			$apiurl .= "&apikey=" . urlencode($apikey);
+			$apiurl .= "&exclude=current,minutely,hourly";
+
+			//get weather
+			$curl = curl_init();
+			curl_setopt_array($curl, [
+				CURLOPT_URL => $apiurl,
+				CURLOPT_RETURNTRANSFER => 1
+			]);
+			$forecast = json_decode(curl_exec($curl));
+			$daily_forecast = $forecast->{"daily"};
+			
+			//render weather forecast
+			echo '<div class="card shadow bg-light container-md my-2 py-2">';
+			echo '<div class="w-100 row mx-auto">';	//forecast header
+			echo '<div class="col-8 text-center"><h3 class="">'.$locations[$i]["locName"].'</h3></div>';	//location name
+			echo '<div class="col-4 text-right"><button class="btn" class="button"></button>';
+			echo '<button class="btn" type="button"></button></div>';
+			echo '</div>';
+			echo '<div class="w-100 d-flex flex-row flex-wrap mx-auto my-2">';	//forecast body
+			for($j=0; $j<sizeof($daily_forecast); $j++){
+				//parse api results
+				$day_forecast = $daily_forecast[$j];
+				$day = date("l",$day_forecast->{"dt"}+0);
+				$weather_icon;
+				$temp_min = $day_forecast->{"temp"}->{"min"};	//min temp in kelvin
+				$temp_min = round($temp_min - 272.15);
+				$temp_max = $day_forecast->{"temp"}->{"max"};	//max temp in kelvin
+				$temp_max = round($temp_max - 272.15);
+				echo '<div class="card flex-fill mx-1 overflow-hidden day-forecast-card">';
+				echo '<h5 class="text-center">'.$day.'</h5>';	//day name
+				echo '<div></div>';	//weather icon
+				echo '<div class="d-flex flex-row">';
+				echo '<div class="text-center flex-fill temp-max">'.$temp_max.'C</div>'; //maximum temperature
+				echo '<div class="text-center flex-fill temp-min">'.$temp_min.'C</div>'; //minimum temperature
+				echo '</div></div>';
+			}
+			echo '</div>';
+			echo '<div class="collapse" id="detailedForecast'.$i.'">';	//forecast body extension
+			echo 'Extended forecast';
+			echo '</div>';
+			echo '<button class="btn btn-block w-100" type="button" data-toggle="collapse"';	//toggle forecast body extension button
+			echo 'data-target="#detailedForecast'.$i.'" aria-expanded="false"';
+			echo 'aria-controls="collapseForecast">&#x25bc;</button>';
+			echo '</div>';
+
+			curl_close($curl);
+		}
+		?>
 	</div>
 </body>
 

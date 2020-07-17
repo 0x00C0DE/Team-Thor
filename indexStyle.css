@@ -1,0 +1,9 @@
+.day-forecast-card{
+	background: #cccccc !important;
+}
+.temp-max{
+	color: #dd7700;
+}
+.temp-min{
+	color: #3300ff;
+}
