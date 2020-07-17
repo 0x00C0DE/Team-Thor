@@ -91,12 +91,12 @@
 				$day_forecast = $daily_forecast[$j];
 				$day = date("l",$day_forecast->{"dt"}+0);
 				$weather_id = $day_forecast->{"weather"}[0]->{"id"};
-				if($weather_id < 300) $weather_icon = "";	//thunderstorms
-				else if($weather_id < 600) $weather_icon = "./Rain.png";	//drizzle & rain
-				else if($weather_id < 700) $weather_icon = "./Snow.png";	//snow
+				if($weather_id < 300) $weather_icon = "./Icons/Thunderstorm.png";	//thunderstorms
+				else if($weather_id < 600) $weather_icon = "./Icons/Rain.png";	//drizzle & rain
+				else if($weather_id < 700) $weather_icon = "./Icons/Snow.png";	//snow
 				else if($weather_id < 800) $weather_icon = "";	//atmospheric conditions
-				else if($weather_id < 801) $weather_icon = "./Sun.png";	//clear
-				else $weather_icon = "./Cloud.png";	//cloudy
+				else if($weather_id < 801) $weather_icon = "./Icons/Sun.png";	//clear
+				else $weather_icon = "./Icons/Cloud.png";	//cloudy
 				$temp_min = $day_forecast->{"temp"}->{"min"};	//min temp in kelvin
 				$temp_min = round($temp_min - 272.15);
 				$temp_max = $day_forecast->{"temp"}->{"max"};	//max temp in kelvin
