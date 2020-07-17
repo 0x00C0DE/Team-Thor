@@ -101,7 +101,7 @@
 				$temp_min = round($temp_min - 272.15);
 				$temp_max = $day_forecast->{"temp"}->{"max"};	//max temp in kelvin
 				$temp_max = round($temp_max - 272.15);
-				echo '<div class="card flex-fill mx-1 overflow-hidden day-forecast-card">';
+				echo '<div class="card flex-fill m-1 overflow-hidden day-forecast-card">';
 				echo '<h5 class="text-center">'.$day.'</h5>';	//day name
 				echo '<div class="text-center flex-fill weather-icon-div"><img class="rounded img-fluid" src="'.$weather_icon.'"></div>';	//weather icon
 				echo '<div class="d-flex flex-row">';
