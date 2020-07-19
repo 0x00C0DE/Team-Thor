@@ -38,6 +38,7 @@
 				echo '</a>';
 				echo '<a class="btn btn-secondary" href="./logout.php">Log Out';
 			}
+			
 			echo '</a>'
 			?>
 		</div>
@@ -121,6 +122,26 @@
 			curl_close($curl);
 		}
 		?>
+		<h3>Job Listings</h3>
+         <?php
+          $conn = dbconnect();
+
+          $sql = "SELECT * FROM `Account`";
+
+          $result = mysqli_query($conn, $sql);
+
+          if(mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)) {
+               echo '<div class="user-listing-preview-item">';
+               echo '<h4>' . $row['username'] . '</h4>';
+               echo '<p>' . substr($row['psswrd'], 0, min(strlen($row['psswrd']), 30)) . '... </p>';
+               echo '<p>Salary: $' .$row['email'] . '. </p>';
+               echo '<p>Posted by ' . $row['name'] . ' on ' . date("l F j, Y", strtotime($row['b_date'])) . '.</p>';
+               echo "</div>";
+            }
+          }
+
+          ?>
 	</div>
 </body>
 </html>
