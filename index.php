@@ -8,12 +8,13 @@
 	?>
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" href="./indexStyle.css">
+	<!-- jQuery & Popper.js -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<!-- Boostrap css -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<!-- JS for Bootstrap-->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigiin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="container-fluid w-100 bg-info">
@@ -73,6 +74,7 @@
 					$apiurl .= "&lon=" . urlencode($location["lon"]);
 					$apiurl .= "&apikey=" . urlencode($apikey);
 					$apiurl .= "&exclude=current,minutely,hourly";
+					$apiurl .= "&units=metric";
 
 					//get weather forecast from api
 					$curl = curl_init();
@@ -102,25 +104,88 @@
 						else if($weather_id < 800) $weather_icon = "";	//atmospheric conditions
 						else if($weather_id < 801) $weather_icon = "./Icons/Sun.png";	//clear
 						else $weather_icon = "./Icons/Cloud.png";	//cloudy
-						$temp_min = $day_forecast->{"temp"}->{"min"};	//min temp in kelvin
-						$temp_min = round($temp_min - 272.15);
-						$temp_max = $day_forecast->{"temp"}->{"max"};	//max temp in kelvin
-						$temp_max = round($temp_max - 272.15);
 						echo '<div class="card flex-fill m-1 overflow-hidden day-forecast-card">';
-						echo '<h5 class="text-center">'.$day.'</h5>';	//day name
-						echo '<div class="text-center flex-fill weather-icon-div"><img class="rounded img-fluid" src="'.$weather_icon.'"></div>';	//weather icon
+						//day name
+						echo '<h5 class="text-center">'.$day.'</h5>';
+						//weather icon
+						echo '<div class="text-center flex-fill weather-icon-div"><img class="rounded img-fluid" src="'.$weather_icon.'"></div>';
 						echo '<div class="d-flex flex-row">';
-						echo '<div class="text-center flex-fill temp-max">'.$temp_max.'C</div>'; //maximum temperature
-						echo '<div class="text-center flex-fill temp-min">'.$temp_min.'C</div>'; //minimum temperature
+						//maximum temperature
+						$temp_max = $day_forecast->{"temp"}->{"max"};	//max temp in kelvin
+						$temp_max = round($temp_max);
+						echo '<div class="text-center flex-fill temp-max">'.$temp_max.'C</div>';
+						//minimum temperature
+						$temp_min = $day_forecast->{"temp"}->{"min"};	//min temp in kelvin
+						$temp_min = round($temp_min);
+						echo '<div class="text-center flex-fill temp-min">'.$temp_min.'C</div>';
+						echo '</div>';
+						//extra forecast details
+						echo '<div class="w-100 collapse overflow-auto detailedForecast'.$i.'">';
+						//sunrise
+						$sunrise = $day_forecast->{"sunrise"};
+						$sunrise = new DateTime("@$sunrise");
+						echo '<div class="text-nowrap">Sunrise:'.$sunrise->format("H:i:s");
+						echo '</div>';	//todo: time zones
+						//sunset
+						$sunset = $day_forecast->{"sunset"};
+						$sunset = new DateTime("@$sunset");
+						echo '<div class="text-nowrap">Sunset:'.$sunset->format("H:i:s");
+						echo '</div>';
+						//morning temperature
+						$temp_morn = $day_forecast->{"temp"}->{"morn"};
+						$temp_morn = round($temp_morn);
+						echo '<div class="text-nowrap">Morning:'.$temp_morn;
+						echo 'C</div>';
+						//day temperature
+						$temp_day = $day_forecast->{"temp"}->{"day"};
+						$temp_day = round($temp_day);
+						echo '<div class="text-nowrap">Day:'.$temp_day;
+						echo 'C</div>';
+						//evening temperature
+						$temp_eve = $day_forecast->{"temp"}->{"eve"};
+						$temp_eve = round($temp_eve);
+						echo '<div class="text-nowrap">Evening:'.$temp_eve;
+						echo 'C</div>';
+						//night temperature
+						$temp_night = $day_forecast->{"temp"}->{"night"};
+						$temp_night = round($temp_night);
+						echo '<div class="text-nowrap">Night:'.$temp_night;
+						echo 'C</div>';
+						//pressure
+						$press = $day_forecast->{"pressure"};
+						echo '<div class="text-nowrap">Pressure:'.$press;
+						echo 'hPa</div>';
+						//humidity
+						$humid = $day_forecast->{"humidity"};
+						echo '<div class="text-nowrap">Humidity:'.$humid;
+						echo '%</div>';
+						//dew point
+						$dew = round($day_forecast->{"dew_point"});
+						echo '<div class="text-nowrap">Dew Point:'.$dew;
+						echo 'C</div>';
+						//wind (speed & direction)
+						$wind_speed = round($day_forecast->{"wind_speed"});
+						$wind_dir = $day_forecast->{"wind_deg"};
+						echo '<div class="text-nowrap">Wind:'.$wind_speed;
+						echo 'm/s @ '.$wind_dir.'&deg;</div>';
+						//cloud cover
+						$clouds = $day_forecast->{"clouds"};
+						echo '<div class="text-nowrap">Cloud Cover:'.$clouds;
+						echo '%</div>';
+						//chance of precipitation
+						$precip = $day_forecast->{"pop"};
+						echo '<div class="text-nowrap">Chance of Precipitation:'.$precip;
+						echo '%</div>';
+						//uv index
+						$uvi = round($day_forecast->{"uvi"});
+						echo '<div class="text-nowrap">Midday UV Index:'.$uvi;
+						echo '</div>';
 						echo '</div></div>';
 					}
 					echo '</div>';
-					echo '<div class="collapse" id="detailedForecast'.$i.'">';	//forecast body extension
-					echo 'Extended forecast';
-					echo '</div>';
-					echo '<button class="btn btn-block w-100" type="button" data-toggle="collapse"';	//toggle forecast body extension button
-					echo 'data-target="#detailedForecast'.$i.'" aria-expanded="false"';
-					echo 'aria-controls="collapseForecast">&#x25bc;</button>';
+					echo '<button class="btn btn-block w-100 collapsed" type="button" data-toggle="collapse"';	//toggle forecast body extension button
+					echo 'data-target=".detailedForecast'.$i.'" aria-expanded="false"';
+					echo 'aria-controls="collapseForecast"></button>';
 					echo '</div>';
 
 					curl_close($curl);

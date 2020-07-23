@@ -10,3 +10,10 @@
 .temp-min{
 	color: #3300ff;
 }
+
+[data-toggle="collapse"]:not(.collapsed):before{
+	content: "▲";
+}
+[data-toggle="collapse"].collapsed:before{
+	content: "▼";
+}
