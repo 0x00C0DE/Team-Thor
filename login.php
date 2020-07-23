@@ -1,4 +1,5 @@
 <?php
+session_save_path("./sessionDir");
 session_start();
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){

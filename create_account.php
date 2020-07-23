@@ -92,6 +92,13 @@
 			<button class="btn btn-secondary" onclick="goBack()">Go Back</button>
 		</div>
 
+		<?php
+		//show errors
+		ini_set('display_errors',1);
+		ini_set('display_startup_errors',1);
+		error_reporting(E_ALL);
+		?>
+
 		<div class="create-account container-md mx-auto bg-light flex-grow-1">
 			<form method="post" class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 				<div class="create-account-input form-group">
