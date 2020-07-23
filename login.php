@@ -82,46 +82,44 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta name="viewport" content="width=device-width">
-	<!-- Boostrap css -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<!-- JS for Bootstrap-->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigiin="anonymous"></script>
+	<?php
+	require_once "./php/meta.php";
+	?>
 </head>
 <body>
-	<div class="d-flex flex-column min-vh-100">
-		<h1 class="container-fluid bg-info text-center py-2">Log In</h1>
-
-		<div class="container-md mx-auto bg-light flex-grow-1">
-			<form class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-				<div class="login-input form-group">
-					<label for="username">Username:</label>
-					<input type="text" name="username" class="form-control <?php
-						if(!empty($username_err)) echo "input-error";
-					?>" value="<?php echo $username; ?>" required>
-					<?php
-					if(!empty($username_err)) {
-						echo "<p><span class='input-error'>" . $username_err . "</span></p>";
-					}
-					?>
-				</div>
-
-				<div class="login-input form-group">
-					<label for="pwrd">Password:</label>
-					<input type="password" name="pwrd" class="form-control <?php
-						if(!empty($password_err)) echo "input-error";
-					?>" required>
-					<?php
-					if(!empty($password_err)) {
-						echo "<p><span class='input-error'>". $password_err . "</span></p>";
-					}
-					?>
-				</div>
-				<input type="submit" id="login-submit" value="Log In" class="btn btn-primary">
-			</form>
+	<?php
+	include "./php/header.php";
+	?>
+	<div class="container-md mx-auto bg-light card shadow my-3">
+		<div class="py-2">
+			<h2 class="text-center">Log In</h2>
 		</div>
+		<form class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+			<div class="login-input form-group">
+				<label for="username">Username:</label>
+				<input type="text" name="username" class="form-control <?php
+					if(!empty($username_err)) echo "input-error";
+				?>" value="<?php echo $username; ?>" required>
+				<?php
+				if(!empty($username_err)) {
+					echo "<p><span class='input-error'>" . $username_err . "</span></p>";
+				}
+				?>
+			</div>
+				
+			<div class="login-input form-group">
+				<label for="pwrd">Password:</label>
+				<input type="password" name="pwrd" class="form-control <?php
+					if(!empty($password_err)) echo "input-error";
+				?>" required>
+				<?php
+				if(!empty($password_err)) {
+					echo "<p><span class='input-error'>". $password_err . "</span></p>";
+				}
+				?>
+			</div>
+			<input type="submit" id="login-submit" value="Log In" class="btn btn-primary">
+		</form>
 	</div>
 </body>
 

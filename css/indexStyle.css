@@ -20,9 +20,9 @@ img.half{
 	max-width: 50%;
 }
 
-[data-toggle="collapse"]:not(.collapsed):before{
+.showDetailsButton:not(.collapsed):before{
 	content: "▲";
 }
-[data-toggle="collapse"].collapsed:before{
+.showDetailsButton.collapsed:before{
 	content: "▼";
 }

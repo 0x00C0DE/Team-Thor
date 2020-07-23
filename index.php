@@ -5,52 +5,19 @@
 	session_save_path("./sessionDir");
 	session_start();
 	require_once "./.dblogin.php";
+
+	require_once "./php/meta.php";
 	?>
-	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" href="./indexStyle.css">
-	<!-- jQuery & Popper.js -->
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<!-- Boostrap css -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<!-- JS for Bootstrap-->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="./css/indexStyle.css">
 </head>
 <body>
-  <div class="container-fluid w-100 bg-info">
-	  <h1 class="display-3 pt-2 text-center">Weather App</h1>
-	  <div class="container-md mx-auto d-flex flex-row justify-content-center justify-content-md-end pb-2">
-			<?php
-			//show errors
-			ini_set('display_errors',1);
-			ini_set('display_startup_errors',1);
-			error_reporting(E_ALL);
+	<?php
+	//create database connection
+	$conn = dbconnect();
 
-			//create database connection
-			$conn = dbconnect();
-
-			echo '<a class="btn mr-2 ';
-			if(!isset($_SESSION["loggedin"])) {	//user is not logged in
-				echo 'btn-secondary" href="./create_account.php">Create Account</a>';
-				echo '<a class="btn btn-secondary" href="./login.php">Log In';
-				echo '</a>';
-			}
-			else if($_SESSION["loggedin"] === true){	//user is logged in
-				echo 'btn-success" href="./profile.php">';
-				$sql = "SELECT name FROM Account WHERE username='" . $_SESSION['user'] . "'";
-				$result = mysqli_query($conn,$sql);
-
-				if(mysqli_num_rows($result) == 1){
-					$row = mysqli_fetch_array($result);
-					echo $row['name'];
-				}
-				echo '</a>';
-				echo '<a class="btn btn-secondary" href="./logout.php">Log Out';
-				echo '</a>';
-			}
-			?>
-		</div>
-	</div>
+	//include header
+	require_once './php/header.php';
+	?>
 
 	<div class="container-md mb-3">
 		<?php
@@ -239,8 +206,8 @@
 					}
 					echo '</div>';
 					//toggle forecast body extension button
-					echo '<button class="btn btn-block w-100 collapsed" type="button" data-toggle="collapse"';
-					echo 'data-target=".detailedForecast'.$i.'" aria-expanded="false"';
+					echo '<button class="btn btn-block w-100 collapsed showDetailsButton" type="button"';
+					echo 'data-toggle="collapse" data-target=".detailedForecast'.$i.'" aria-expanded="false"';
 					echo 'aria-controls="collapseForecast"></button>';
 					echo '</div>';
 

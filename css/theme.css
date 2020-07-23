@@ -1,0 +1,12 @@
+body{
+	background-image: url('../theme.jpg');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100% 100%;
+}
+.bg-grey{
+	background-color: #e9e9e9 !important;
+}
+a.bg-grey:hover{
+	background-color: #cad0d5 !important;
+}
