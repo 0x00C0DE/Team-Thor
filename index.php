@@ -85,6 +85,8 @@
 					$forecast = json_decode(curl_exec($curl));
 					$daily_forecast = $forecast->{"daily"};
 			
+					$temp_units = "C";
+
 					//render weather forecast
 					echo '<div class="card shadow bg-light container-fluid my-2 py-2">';
 					echo '<div class="w-100 row mx-auto">';	//forecast header
@@ -96,7 +98,6 @@
 					for($j=0; $j<sizeof($daily_forecast); $j++){
 						//parse api results
 						$day_forecast = $daily_forecast[$j];
-						$day = date("l",$day_forecast->{"dt"}+0);
 						$weather_id = $day_forecast->{"weather"}[0]->{"id"};
 						if($weather_id < 300) $weather_icon = "./Icons/Thunderstorm.png";	//thunderstorms
 						else if($weather_id < 600) $weather_icon = "./Icons/Rain.png";	//drizzle & rain
@@ -106,84 +107,139 @@
 						else $weather_icon = "./Icons/Cloud.png";	//cloudy
 						echo '<div class="card flex-fill m-1 overflow-hidden day-forecast-card">';
 						//day name
+						$day = date("l",$day_forecast->{"dt"}+0);
 						echo '<h5 class="text-center">'.$day.'</h5>';
 						//weather icon
-						echo '<div class="text-center flex-fill weather-icon-div"><img class="rounded img-fluid" src="'.$weather_icon.'"></div>';
+						$weather_descrip = ucfirst($day_forecast->{"weather"}[0]->{"description"});
+						echo '<div class="text-center flex-fill weather-icon-div" title="'.$weather_descrip.'">';
+						echo '<img class="rounded img-fluid" src="'.$weather_icon.'"></div>';
 						echo '<div class="d-flex flex-row">';
 						//maximum temperature
 						$temp_max = $day_forecast->{"temp"}->{"max"};	//max temp in kelvin
 						$temp_max = round($temp_max);
-						echo '<div class="text-center flex-fill temp-max">'.$temp_max.'C</div>';
+						echo '<div class="text-center flex-fill temp-min-max" title="Maximum temperature">';
+						echo '<img class="img-fluid" src="./Icons/TempHigh.png">';
+						echo $temp_max.$temp_units.'</div>';
 						//minimum temperature
 						$temp_min = $day_forecast->{"temp"}->{"min"};	//min temp in kelvin
 						$temp_min = round($temp_min);
-						echo '<div class="text-center flex-fill temp-min">'.$temp_min.'C</div>';
+						echo '<div class="text-center flex-fill temp-min-max" title="Minimum temperature">';
+						echo '<img class="img-fluid" src="./Icons/TempLow.png">';
+						echo $temp_min.$temp_units.'</div>';
 						echo '</div>';
 						//extra forecast details
-						echo '<div class="w-100 collapse overflow-auto detailedForecast'.$i.'">';
+						echo '<div class="w-100 collapse overflow-auto detailedForecast detailedForecast'.$i.'">';
 						//sunrise
 						$sunrise = $day_forecast->{"sunrise"};
 						$sunrise = new DateTime("@$sunrise");
-						echo '<div class="text-nowrap">Sunrise:'.$sunrise->format("H:i:s");
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="Sunrise">';
+						echo '<img class="img-fluid" src="./Icons/Sunrise.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$sunrise->format("H:i:s").'</div>';
 						echo '</div>';	//todo: time zones
 						//sunset
 						$sunset = $day_forecast->{"sunset"};
 						$sunset = new DateTime("@$sunset");
-						echo '<div class="text-nowrap">Sunset:'.$sunset->format("H:i:s");
-						echo '</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="Sunset">';
+						echo '<img class="img-fluid" src="./Icons/Sunset.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$sunset->format("H:i:s").'</div>';
+						echo '</div>';	//todo: time zones
 						//morning temperature
 						$temp_morn = $day_forecast->{"temp"}->{"morn"};
 						$temp_morn = round($temp_morn);
-						echo '<div class="text-nowrap">Morning:'.$temp_morn;
-						echo 'C</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" ';
+						echo 'title="Temperature in the morning">';
+						echo '<div class="d-flex flex-row">';
+						echo '<img class="img-fluid" src="./Icons/Sunrise.png">';
+						echo '<img class="img-fluid" src="./Icons/Temp.png">';
+						echo '</div>';
+						echo '<div class="mx-1 flex-fill text-center">'.$temp_morn.$temp_units.'</div>';
+						echo '</div>';
 						//day temperature
 						$temp_day = $day_forecast->{"temp"}->{"day"};
 						$temp_day = round($temp_day);
-						echo '<div class="text-nowrap">Day:'.$temp_day;
-						echo 'C</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" ';
+						echo 'title="Temperature in the day">';
+						echo '<div class="d-flex flex-row">';
+						echo '<img class="img-fluid" src="./Icons/Sun.png">';
+						echo '<img class="img-fluid" src="./Icons/Temp.png">';
+						echo '</div>';
+						echo '<div class="mx-1 flex-fill text-center">'.$temp_day.$temp_units.'</div>';
+						echo '</div>';
 						//evening temperature
 						$temp_eve = $day_forecast->{"temp"}->{"eve"};
 						$temp_eve = round($temp_eve);
-						echo '<div class="text-nowrap">Evening:'.$temp_eve;
-						echo 'C</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" ';
+						echo 'title="Temperature in the evening">';
+						echo '<div class="d-flex flex-row">';
+						echo '<img class="img-fluid" src="./Icons/Sunset.png">';
+						echo '<img class="img-fluid" src="./Icons/Temp.png">';
+						echo '</div>';
+						echo '<div class="mx-1 flex-fill text-center">'.$temp_eve.$temp_units.'</div>';
+						echo '</div>';
 						//night temperature
 						$temp_night = $day_forecast->{"temp"}->{"night"};
 						$temp_night = round($temp_night);
-						echo '<div class="text-nowrap">Night:'.$temp_night;
-						echo 'C</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" ';
+						echo 'title="Temperature at night">';
+						echo '<div class="d-flex flex-row">';
+						echo '<img class="img-fluid" src="./Icons/Night.png">';
+						echo '<img class="img-fluid" src="./Icons/Temp.png">';
+						echo '</div>';
+						echo '<div class="mx-1 flex-fill text-center">'.$temp_night.$temp_units.'</div>';
+						echo '</div>';
 						//pressure
 						$press = $day_forecast->{"pressure"};
-						echo '<div class="text-nowrap">Pressure:'.$press;
-						echo 'hPa</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="Pressure">';
+						echo '<img class="img-fluid half" src="./Icons/Pressure.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$press.'hPa</div>';
+						echo '</div>';
 						//humidity
 						$humid = $day_forecast->{"humidity"};
-						echo '<div class="text-nowrap">Humidity:'.$humid;
-						echo '%</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="Humidity">';
+						echo '<img class="img-fluid half" src="./Icons/Humidity.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$humid.'%</div>';
+						echo '</div>';
 						//dew point
 						$dew = round($day_forecast->{"dew_point"});
-						echo '<div class="text-nowrap">Dew Point:'.$dew;
-						echo 'C</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="Dew point">';
+						echo '<img class="img-fluid half" src="./Icons/DewPoint.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$dew.$temp_units.'</div>';
+						echo '</div>';
 						//wind (speed & direction)
 						$wind_speed = round($day_forecast->{"wind_speed"});
 						$wind_dir = $day_forecast->{"wind_deg"};
-						echo '<div class="text-nowrap">Wind:'.$wind_speed;
-						echo 'm/s @ '.$wind_dir.'&deg;</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center"';
+						echo 'title="Wind speed and direction">';
+						echo '<img class="img-fluid third" src="./Icons/Wind.png">';
+						echo '<div class="mx-1 flex-fill d-flex flex-column">';
+						echo '<div class="text-center">'.$wind_speed.'m/s</div>';
+						echo '<div class="text-center">'.$wind_dir.'&deg;</div>';
+						echo '</div></div>';
 						//cloud cover
 						$clouds = $day_forecast->{"clouds"};
-						echo '<div class="text-nowrap">Cloud Cover:'.$clouds;
-						echo '%</div>';
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="Cloud cover">';
+						echo '<img class="img-fluid half" src="./Icons/Cloud.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$clouds.'%</div>';
+						echo '</div>';
 						//chance of precipitation
-						$precip = $day_forecast->{"pop"};
-						echo '<div class="text-nowrap">Chance of Precipitation:'.$precip;
-						echo '%</div>';
+						$precip = round($day_forecast->{"pop"} * 100);
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" ';
+						echo 'title="Chance of precipitation">';
+						echo '<img class="img-fluid half" src="./Icons/Rain.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$precip.'%</div>';
+						echo '</div>';
 						//uv index
 						$uvi = round($day_forecast->{"uvi"});
-						echo '<div class="text-nowrap">Midday UV Index:'.$uvi;
+						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="UV index">';
+						echo '<img class="img-fluid half" src="./Icons/Sun.png">';
+						echo '<div class="mx-1 flex-fill text-center">'.$uvi.'</div>';
 						echo '</div>';
+						//close divs
 						echo '</div></div>';
 					}
 					echo '</div>';
-					echo '<button class="btn btn-block w-100 collapsed" type="button" data-toggle="collapse"';	//toggle forecast body extension button
+					//toggle forecast body extension button
+					echo '<button class="btn btn-block w-100 collapsed" type="button" data-toggle="collapse"';
 					echo 'data-target=".detailedForecast'.$i.'" aria-expanded="false"';
 					echo 'aria-controls="collapseForecast"></button>';
 					echo '</div>';
@@ -203,21 +259,20 @@
 			echo '</div>';
 		}
 		?>
-		<h3>Users</h3>
 		<?php
 		$sql = "SELECT * FROM `Account`";
 		$result = mysqli_query($conn, $sql);
 
-		if(mysqli_num_rows($result) > 0) {
+		/*if(mysqli_num_rows($result) > 0) {
+			echo '<h3>Users</h3>';
 			while($row = mysqli_fetch_array($result)) {
 				echo '<div class="user-listing-preview-item">';
-				echo '<h4>' . $row['username'] . '</h4>';
-				echo '<p>' . substr($row['psswrd'], 0, min(strlen($row['psswrd']), 30)) . '... </p>';
-				echo '<p>Salary: $' .$row['email'] . '. </p>';
-				echo '<p>Posted by ' . $row['name'] . ' on ' . date("l F j, Y", strtotime($row['b_date'])) . '.</p>';
+				echo '<h4>'.$row['username'].'</h4>';
+				echo '<p>Pwd: '.$row['psswrd'].'</p>';
+				echo '<p>Email: '.$row['email'].'</p>';
 				echo "</div>";
 			}
-		}
+		}*/
 		?>
 	</div>
 </body>

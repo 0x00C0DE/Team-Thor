@@ -4,11 +4,20 @@
 .weather-icon-div{
 	max-width: calc(100% - 5px);
 }
-.temp-max{
-	color: #dd7700;
+.temp-min-max{
+	max-width: 50%;
+	overflow: hidden;
 }
-.temp-min{
-	color: #3300ff;
+.detailedForecast>div{
+	border-top: 2px solid black;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+img.third{
+	max-width: 33%;
+}
+img.half{
+	max-width: 50%;
 }
 
 [data-toggle="collapse"]:not(.collapsed):before{
