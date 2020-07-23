@@ -25,12 +25,14 @@
 			ini_set('display_startup_errors',1);
 			error_reporting(E_ALL);
 
+			//create database connection
 			$conn = dbconnect();
+
 			echo '<a class="btn mr-2 ';
 			if(!isset($_SESSION["loggedin"])) {	//user is not logged in
 				echo 'btn-secondary" href="./create_account.php">Create Account</a>';
 				echo '<a class="btn btn-secondary" href="./login.php">Log In';
-				echo '</a>'
+				echo '</a>';
 			}
 			else if($_SESSION["loggedin"] === true){	//user is logged in
 				echo 'btn-success" href="./profile.php">';
@@ -43,7 +45,7 @@
 				}
 				echo '</a>';
 				echo '<a class="btn btn-secondary" href="./logout.php">Log Out';
-				echo '</a>'
+				echo '</a>';
 			}
 			?>
 		</div>
@@ -56,12 +58,14 @@
 		$apikey = trim(fread($apikeyfile,filesize("api_secret_key")));
 		fclose($apikeyfile);
 
-		if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){	//check if the user is logged in
-			//$query = "SELECT * FROM locations LEFT JOIN Account ON locations.user_lid=Account.lid WHERE Account.username='"+$_SESSION["user"]+"'";
-			//$result = mysqli_query($conn, $query);
-			//var_dump($result);
-			die("");
+		if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] && isset($_SESSION["user"])){	//check if the user is logged in
+			$query = "SELECT locations.name AS name, lat, lon FROM locations ";
+			$query .= "LEFT JOIN Account ON locations.user_lid=Account.lid";
+			$query .= " WHERE Account.username='".$_SESSION["user"]."'";
+			$result = mysqli_query($conn, $query);
+
 			if(mysqli_num_rows($result) > 0){
+				$i = 0;	//index variable
 				while($location = mysqli_fetch_array($result)){
 					//generate url for request
 					$apiurl = "https://api.openweathermap.org/data/2.5/onecall";
@@ -120,6 +124,7 @@
 					echo '</div>';
 
 					curl_close($curl);
+					$i += 1;
 				}
 			}
 		}
