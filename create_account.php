@@ -108,8 +108,11 @@
 					<label for="conf-pwrd">Confirm Password:</label><br>
 					<input type="password" class="form-control" name="conf-pwrd" required>
 				</div>
-				<input type="submit" value="Create Account" id="create-account-submit"
-					class="btn btn-primary">
+				<div class="d-flex flex-row justify-content-around">
+					<input type="submit" value="Create Account" id="create-account-submit"
+						class="btn btn-primary">
+					<a href="./index.php" class="btn btn-secondary">Cancel</a>
+				</div>
 			</form>
 		</div>
 	</div>

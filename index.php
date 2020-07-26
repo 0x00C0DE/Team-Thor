@@ -26,11 +26,21 @@
 		$apikey = trim(fread($apikeyfile,filesize("api_secret_key")));
 		fclose($apikeyfile);
 
-		if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] && isset($_SESSION["user"])){	//check if the user is logged in
-			$query = "SELECT locations.name AS name, lat, lon FROM locations ";
+		if(isset($_SESSION["loggedin"])
+			&& $_SESSION["loggedin"]
+			&& isset($_SESSION["user"])){	//check if the user is logged in
+			$query = "SELECT locations.name AS name, lat, lon, user_lid, is_subscribed FROM locations ";
 			$query .= "LEFT JOIN Account ON locations.user_lid=Account.lid";
 			$query .= " WHERE Account.username='".$_SESSION["user"]."'";
 			$result = mysqli_query($conn, $query);
+
+			//JS for subscriptions and deleting locations
+			$script = "<script>
+			function deleteLocation(){
+				//
+			}
+			</script>";
+			echo $script;
 
 			if(mysqli_num_rows($result) > 0){
 				$i = 0;	//index variable
@@ -51,17 +61,32 @@
 					]);
 					$forecast = json_decode(curl_exec($curl));
 					$daily_forecast = $forecast->{"daily"};
+
+					//get mail icon
+					$mailIcon = "./Icons/Mail.png";
+					if($location["is_subscribed"]=="YES") $mailIcon = "./Icons/MailFilled.png";
 			
 					$temp_units = "C";
 
 					//render weather forecast
-					echo '<div class="card shadow bg-light container-fluid my-2 py-2">';
+					echo '<div class="card shadow bg-light container-fluid my-2 py-2"';
+					echo 'data-location="'.$location["name"].'" data-user="';
+					echo $location["user_lid"].'">';
 					echo '<div class="w-100 row mx-auto">';	//forecast header
-					echo '<div class="col-8 text-center"><h3 class="">'.$location["name"].'</h3></div>';	//location name
-					echo '<div class="col-4 text-right"><button class="btn" class="button"></button>';
-					echo '<button class="btn" type="button"></button></div>';
-					echo '</div>';
-					echo '<div class="w-100 d-flex flex-column flex-md-row flex-nowrap mx-auto my-2">';	//forecast body
+					echo '<div class="col-8 text-center"><h3>'.$location["name"].'</h3></div>';	//location name
+					echo '<div class="col-4 d-flex flex-row justify-content-end">';
+					echo '<form action="./php/toggleSub.php" method="post">';	//toggle email subscription
+					echo '<input name="location_name" class="d-none" value="';
+					echo $location["name"].'">';
+					echo '<button class="btn btn-light" type="submit">';
+					echo '<img class="small" src="'.$mailIcon.'"></button></form>';
+					echo '<form action="./php/deleteLocation.php" method="post">';	//delete location
+					echo '<input name="location_name" class="d-none" value="';
+					echo $location["name"].'">';
+					echo '<button class="btn btn-light" type="submit"></form>';
+					echo '<img class="small" src="./Icons/Trash.png"></button></div>';
+					echo '</div><div class="w-100 d-flex flex-column flex-md-row ';	//forecast body
+					echo 'flex-nowrap mx-auto my-2">';
 					for($j=0; $j<sizeof($daily_forecast); $j++){
 						//parse api results
 						$day_forecast = $daily_forecast[$j];
@@ -215,6 +240,12 @@
 					$i += 1;
 				}
 			}
+			else{	//user has no saved locations
+				echo '<div class="card shadow my-3 p-3">';
+				echo '<h2 class="text-center">You have no saved locations';
+				echo '</h2>';
+				echo '</div>';
+			}
 		}
 		else{	//user is not logged in
 			echo '<div class="card shadow my-3 p-3">';
@@ -223,6 +254,9 @@
 			echo '<h5 class="text-center">';
 			echo 'You must be logged in to log in to view weather forecasts';
 			echo '</h5>';
+			echo '<div class="d-flex flex-row justify-content-center">';
+			echo '<a href="./login.php" class="btn btn-primary">Log In</a>';
+			echo '</div>';
 			echo '</div>';
 		}
 		?>
