@@ -1,3 +1,6 @@
+__pycache__
 api_secret_key
 sessionDir
 .dblogin.php
+node_modules
+emailConst.json
