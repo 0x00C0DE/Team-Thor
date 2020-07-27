@@ -34,14 +34,6 @@
 			$query .= " WHERE Account.username='".$_SESSION["user"]."'";
 			$result = mysqli_query($conn, $query);
 
-			//JS for subscriptions and deleting locations
-			$script = "<script>
-			function deleteLocation(){
-				//
-			}
-			</script>";
-			echo $script;
-
 			if(mysqli_num_rows($result) > 0){
 				$i = 0;	//index variable
 				while($location = mysqli_fetch_array($result)){
@@ -80,11 +72,25 @@
 					echo $location["name"].'">';
 					echo '<button class="btn btn-light" type="submit">';
 					echo '<img class="small" src="'.$mailIcon.'"></button></form>';
-					echo '<form action="./php/deleteLocation.php" method="post">';	//delete location
-					echo '<input name="location_name" class="d-none" value="';
-					echo $location["name"].'">';
-					echo '<button class="btn btn-light" type="submit"></form>';
-					echo '<img class="small" src="./Icons/Trash.png"></button></div>';
+					echo '<button type="button" class="btn btn-light" data-toggle="modal" data-target="#delete';
+					echo $location["name"].'Modal">';	//delete location button
+					echo '<img class="small" src="./Icons/Trash.png">';
+					echo '</button></div>';
+					echo '<div id="delete'.$location["name"].'Modal" class="modal fade"';	//delete location modal
+					echo 'tabindex="-1" role="dialog" aria-hidden="true">';
+					echo '<div class="modal-dialog"><div class="modal-content">';
+					echo '<div class="modal-header"><h4>Confirm Delete</h4>';
+					echo '<button type="button" class="close" data-dismiss="modal" ';
+					echo 'aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+					echo '<div class="modal-body">Are you sure you want to delete the ';
+					echo $location["name"].' forecast?</div>';
+					echo '<div class="modal-footer">';
+					echo '<form action="./php/deleteLocation.php" method="post">';
+					echo '<input name="location_name" class="d-none" value="'.$location["name"].'">';
+					echo '<button class="btn btn-danger" type="submit">Delete</button></form>';
+					echo '<button class="btn btn-primary" type="button" data-dismiss="modal">Cancel</button>';
+					echo '</div></div>';
+					echo '</div></div>';
 					echo '</div><div class="w-100 d-flex flex-column flex-md-row ';	//forecast body
 					echo 'flex-nowrap mx-auto my-2">';
 					for($j=0; $j<sizeof($daily_forecast); $j++){
