@@ -69,30 +69,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta name="viewport" content="width=device-width">
-	<!-- Boostrap css -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<!-- JS for Bootstrap-->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigiin="anonymous"></script>
+	<?php
+	require_once "./php/meta.php";
+	?>
 </head>
 <body>
-	<div class="content d-flex flex-column min-vh-100">
-		<h1 class="container-fluid bg-info text-center py-2 m-0">Create an Account</h1>
-
-		<div class="container-md mx-auto bg-light py-2" id="back-button-div">
-			<script>
-				function goBack(){
-					history.back();
-					// If history.back() does nothing, go to homepage
-					window.open("./index.php","_self");
-				}
-			</script>
-			<button class="btn btn-secondary" onclick="goBack()">Go Back</button>
+	<?php
+	//include header
+	include_once "./php/header.php";
+	?>
+	<div class="container-md mx-auto my-3 d-flex flex-column card bg-light">
+		<div class="py-2">
+			<h2 class="text-center">Create Account</h2>
 		</div>
-
-		<div class="create-account container-md mx-auto bg-light flex-grow-1">
+		<div class="create-account flex-grow-1">
 			<form method="post" class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 				<div class="create-account-input form-group">
 					<label for="name">Name:</label>
@@ -118,8 +108,11 @@
 					<label for="conf-pwrd">Confirm Password:</label><br>
 					<input type="password" class="form-control" name="conf-pwrd" required>
 				</div>
-				<input type="submit" value="Create Account" id="create-account-submit"
-					class="btn btn-primary">
+				<div class="d-flex flex-row justify-content-around">
+					<input type="submit" value="Create Account" id="create-account-submit"
+						class="btn btn-primary">
+					<a href="./index.php" class="btn btn-secondary">Cancel</a>
+				</div>
 			</form>
 		</div>
 	</div>

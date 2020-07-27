@@ -1,5 +1,6 @@
 <?php
 // Initialize the session
+session_save_path("./sessionDir");
 session_start();
 
 // Unset all of the session variables

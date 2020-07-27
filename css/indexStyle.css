@@ -1,0 +1,38 @@
+.day-forecast-card{
+	background: #cccccc !important;
+}
+.weather-icon-div{
+	max-width: calc(100% - 5px);
+}
+.temp-min-max{
+	max-width: 50%;
+	overflow: hidden;
+}
+.detailedForecast>div{
+	border-top: 2px solid black;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+
+[src="./Icons/MailFilled.png"]{
+	color: green;
+}
+
+img.small{
+	max-width: 25px;
+	max-height: 25px;
+}
+img.third{
+	max-width: 33%;
+}
+img.half{
+	max-width: 50%;
+}
+
+
+.showDetailsButton:not(.collapsed):before{
+	content: "▲";
+}
+.showDetailsButton.collapsed:before{
+	content: "▼";
+}
