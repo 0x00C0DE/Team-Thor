@@ -1,0 +1,63 @@
+body{
+	background-image: url("https://www.tripsavvy.com/thmb/_dm-o8ufgh2qDqTCNhrKhcgmTI0=/960x0/filters:no_upscale():max_bytes(150000):strip_icc()/rain-57bb8fcf3df78c876339a4e2.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100% 100%;
+	min-height: 100vh;
+	width: 100%;
+	max-width: 768px;
+	margin: 0 auto;
+}
+.mainWrapper{
+	background-color: rgba(255,255,255,0.7);
+	padding: 6px;
+}
+.header, .subheader, .hourlyHeader{
+	text-align: center;
+	margin: 3px auto;
+}
+/*.subheader{
+	padding-bottom: 3px;
+	border-bottom: 1px solid black;
+}*/
+
+.forecastWrapper{
+	display: flex;
+	flex-direction: column;
+}
+.summaryWrapper,.hourlyWrapper,.detailsWrapper{
+	width: 100%;
+	background-color: #c0c0c8;
+	border-radius: 3px;
+	box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+	margin: 6px auto;
+}
+.weatherWrapper,.rainWrapper{
+	text-align: center;
+	margin: 3px auto;
+}
+.tempMinMaxWrapper{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+.tempWrapper{
+	margin: 0 3px;
+}
+
+.hourlyWrapper{
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.hourlyTable{
+	width: max-content;
+	margin: 3px auto;
+	border-collapse: collapse;
+}
+.hourlyRow{
+	border: 1px solid black;
+	text-align: center;
+}
+.hourlyRow>*{
+	padding: 2px 5px;
+}
