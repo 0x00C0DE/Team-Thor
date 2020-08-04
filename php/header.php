@@ -34,6 +34,13 @@
 						array_push($navbarItems,array("Logged in as ".$row['name'],"./profile.php","nav-link"));
 					}
 					array_push($navbarItems,array("Log Out","./logout.php","nav-link"));
+					$sqladmin = "SELECT aid FROM Account WHERE username = " . "'" .$_SESSION["user"] . "'";
+
+					$resultadmin = mysqli_query($conn, $sqladmin);
+					$rowadmin = mysqli_fetch_array($resultadmin);
+					if(($rowadmin['aid']) == 1){
+					array_push($navbarItems,array("User list","./userlist.php","nav-link"));
+					}
 				}
 				//add navbar items
 				function showNavItem($item){	//adds a navbar item

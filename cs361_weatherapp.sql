@@ -112,6 +112,16 @@ ALTER TABLE `locations`
   ADD CONSTRAINT `locations_ibfk_1` FOREIGN KEY (`user_lid`) REFERENCES `Account` (`lid`);
 COMMIT;
 
+--
+-- added column to table `account`
+ALTER TABLE Acccount
+  ADD locMax int(11);
+
+--
+-- removed Constraints for aid on table `account`
+ALTER TABLE Account
+  DROP INDEX aid;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
