@@ -12,4 +12,8 @@
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(E_ALL);
+
+function userIsLoggedIn(){
+	return (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] && isset($_SESSION["user"]));
+}
 ?>

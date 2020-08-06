@@ -26,9 +26,7 @@
 		$apikey = trim(fread($apikeyfile,filesize("api_secret_key")));
 		fclose($apikeyfile);
 
-		if(isset($_SESSION["loggedin"])
-			&& $_SESSION["loggedin"]
-			&& isset($_SESSION["user"])){	//check if the user is logged in
+		if(userIsLoggedIn()){	//check if the user is logged in
 			$query = "SELECT locations.name AS name, lat, lon, user_lid, is_subscribed FROM locations ";
 			$query .= "LEFT JOIN Account ON locations.user_lid=Account.lid";
 			$query .= " WHERE Account.username='".$_SESSION["user"]."'";
@@ -57,6 +55,9 @@
 					//get mail icon
 					$mailIcon = "./Icons/Mail.png";
 					if($location["is_subscribed"]=="YES") $mailIcon = "./Icons/MailFilled.png";
+
+					//create location history link
+					$histLink = './weather_history.php?location='.$location["name"];
 			
 					$temp_units = "C";
 
@@ -67,6 +68,9 @@
 					echo '<div class="w-100 row mx-auto">';	//forecast header
 					echo '<div class="col-8 text-center"><h3>'.$location["name"].'</h3></div>';	//location name
 					echo '<div class="col-4 d-flex flex-row justify-content-end">';
+					echo '<a class="btn btn-light" href="'.$histLink.'">';	//view location weather history
+					echo '<img class="small" src="./Icons/Clock.png">';
+					echo '</a>';
 					echo '<form action="./php/toggleSub.php" method="post">';	//toggle email subscription
 					echo '<input name="location_name" class="d-none" value="';
 					echo $location["name"].'">';
@@ -268,7 +272,7 @@
 		?>
 		<?php
 		$sql = "SELECT * FROM `Account`";
-		$result = mysqli_query($conn, $sql);
+		//$result = mysqli_query($conn, $sql);
 
 		/*if(mysqli_num_rows($result) > 0) {
 			echo '<h3>Users</h3>';
