@@ -73,7 +73,7 @@
 			//show message
 			if($showMessage){
 				echo '<div class="text-center text-muted">Some parts of the graph may be cut off, scroll ';
-				echo 'left to see them</div>';
+				echo 'right to see them</div>';
 			}
 		}
 
