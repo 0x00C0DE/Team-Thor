@@ -73,11 +73,7 @@
 			//show message
 			if($showMessage){
 				echo '<div class="text-center text-muted">Some parts of the graph may be cut off, scroll ';
-<<<<<<< HEAD
-				echo 'right to see them</div>';
-=======
 				echo 'left to see them</div>';
->>>>>>> b19b2010d5c70ec5a4b4221c37ffc329bd65ef5d
 			}
 		}
 
@@ -245,8 +241,7 @@
 				echo '</div>';
 
 				//script to enable tooltips
-				echo '<script>$("[data-toggle=\"tooltip\"]").tooltip();';
-				echo '$(".graphDiv").scrollTo(1000,0)</script>';
+				echo '<script>$("[data-toggle=\"tooltip\"]").tooltip()</script>';
 			}
 			else if(!$result){
 				showError("SQL Query Failed",mysqli_error($conn));
