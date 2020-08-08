@@ -23,6 +23,60 @@
 			echo '</div>';
 		}
 
+		function showGraph(
+			$data,
+			$units,
+			$showMinMax=False,
+			$graphHeight=200,
+			$showMessage=True
+		){
+			//find minimum and maximum value
+			$min = 100000;
+			$max = -100000;
+			foreach($data as $dataPoint){
+				$min = min($min,$dataPoint["value"]);
+				$max = max($max,$dataPoint["value"]);
+			}
+			$scalingFactor = $graphHeight/($max - $min);
+
+			//render minimum and maximum table
+			if($showMinMax){
+				echo '<table class="table table-sm border-bottom w-auto mx-auto" style="min-width:50%">';
+				echo '<tr><td>Maximum</td><td>'.$max.$units.'</td></tr>';
+				echo '<tr><td>Minimum</td><td>'.$min.$units.'</td></tr>';
+				echo '</table>';
+			}
+
+			//render graph
+			echo '<div class="w-100 d-flex flex-row overflow-hidden">';
+			echo '<div class="d-flex flex-column justify-content-between mr-1">';
+			echo '<span class="text-dark">'.$max.$units.'</span>';
+			echo '<span class="text-body">'.$min.$units.'</span>';
+			echo '</div>';
+			echo '<div class="flex-grow-1 d-flex flex-row py-2 overflow-auto align-items-end graphDiv" ';
+			echo 'style="-ms-overflow-style:none;scrollbar-width:none;">';
+			$i = 0;
+			foreach($data as $dataPoint){
+				$background = 'bg-info';
+				if($i % 24 == 0) $background = 'bg-dark';
+				echo '<div class="'.$background.' p-1 rounded" ';
+				echo 'data-toggle="tooltip" data-html="true" data-placement="bottom" title="';
+				echo $dataPoint["title"].'" ';
+				echo 'style="margin-right:2px;height:';
+				echo strval(($dataPoint["value"]-$min)*$scalingFactor).'">';
+				echo '</div>';
+				$i++;
+			}
+			echo '</div>';
+			echo '</div>';
+
+			//show message
+			if($showMessage){
+				echo '<div class="text-center text-muted">Some parts of the graph may be cut off, scroll ';
+				echo 'left to see them</div>';
+			}
+		}
+
 		if(isset($_GET["location"]) && userIsLoggedIn()){
 			//send query for location data
 			$query = "SELECT locations.name as name,lat,lon FROM locations ";
@@ -82,6 +136,7 @@
 					array_push($hist, $history);	//add hourly data
 				}
 
+				$tempData = Array();
 				//calculate minumum and maximum temperature
 				$maxTemp = -272;
 				$minTemp = 100;
@@ -89,51 +144,21 @@
 					foreach($day->{"hourly"} as $hour){
 						$maxTemp = max($maxTemp,round($hour->{"temp"}));
 						$minTemp = min($minTemp,round($hour->{"temp"}));
+						//
+						$day = date("l",$hour->{"dt"});
+						$hr = date("H",$hour->{"dt"}); 
+						$temp = round($hour->{"temp"});
+						$title = $day.', '.$hr.':00 GMT<br>'.$temp.'C';
+						array_push($tempData,Array(
+							'value' => $temp,
+							'title' => $title
+						));
 					}
 				}
 				$scalingFactor = 200/($maxTemp - $minTemp);
 
 				//delete loading spinner
 				echo '<script>document.getElementById("loadingSpinner").remove()</script>';
-
-				//render temperature
-				echo '<div class="card shadow container-fluid my-2 py-2 bg-light">';
-				echo '<h2 class="text-dark ml-4">Temperature</h2>';	//header
-				echo '<table class="table table-sm border-bottom w-auto mx-auto" style="min-width:50%">';
-				echo '<tr><td>Maximum Temperature</td><td>'.$maxTemp.'</td></tr>';	//maximum temperature
-				echo '<tr><td>Mimimum Temperature</td><td>'.$minTemp.'</td></tr>';	//minimum temperature
-				echo '</table>';
-				echo '<div class="w-100 d-flex flex-row overflow-hidden">';
-				echo '<div class="d-flex flex-column justify-content-between mr-1">';
-				echo '<span class="text-danger">'.$maxTemp.'C</span>';
-				echo '<span class="text-primary">'.$minTemp.'C</span>';
-				echo '</div>';
-				echo '<div class="flex-grow-1 d-flex flex-row py-2 overflow-auto align-items-end" ';
-				echo 'style="-ms-overflow-style:none;scrollbar-width:none;">';
-				foreach($hist as $dayHist){	//loop through days
-					$first = True;
-					foreach($dayHist->{"hourly"} as $hourHist){	//loop through hours
-						$day = date("l",$hourHist->{"dt"});
-						$hour = date("H",$hourHist->{"dt"}); 
-						$temp = round($hourHist->{"temp"});
-						$background = "bg-info";
-						if($first){
-							$first = False;
-							$background = "bg-dark";
-						}
-						echo '<div class="'.$background.' p-1 rounded" ';
-						echo 'data-toggle="tooltip" data-html="true" data-placement="bottom" title="';
-						echo $day.', '.$hour.":00 GMT<br>";
-						echo $temp.'C" ';
-						echo 'style="height:0;margin-right:2px;height:';
-						echo strval(($temp-$minTemp)*$scalingFactor).'">';
-						echo '</div>';
-					}
-				}
-				echo '</div></div>';
-				echo '<div class="text-center text-muted">Some parts of the graph may be cut off, scroll ';
-				echo 'right to see them</div>';
-				echo '</div>';
 
 				//render weather history
 				echo '<div class="card shadow container-fluid my-2 py-2 bg-light">';
@@ -173,8 +198,51 @@
 				echo '</table>';
 				echo '</div>';
 
+				//render temperature
+				echo '<div class="card shadow container-fluid my-2 py-2 bg-light">';
+				echo '<h2 class="text-dark ml-4">Temperature</h2>';	//header
+				echo '<table class="table table-sm border-bottom w-auto mx-auto" style="min-width:50%">';
+				showGraph($tempData,'C',True,200,True);
+				echo '</div>';
+
+				//render details section
+				echo '<div class="card shadow container-fluid my-2 py-2 bg-light">';
+				echo '<h2 class="text-dark ml-4">Details</h2>';
+				$windData = Array();
+				$cloudData = Array();
+				$humidityData = Array();
+				foreach($hist as $dayHist){
+					foreach($dayHist->{"hourly"} as $hourHist){
+						$day = date('l',$hourHist->{"dt"});
+						$hour = date('H',$hourHist->{"dt"});
+						$wind = $hourHist->{"wind_speed"};
+						$cloud = $hourHist->{"clouds"};
+						$humid = $hourHist->{"humidity"};
+						array_push($windData,Array(
+							"value" => $wind,
+							"title" => $day.', '.$hour.':00 GMT<br>'.$wind.'m/s'
+						));
+						array_push($cloudData,Array(
+							'value' => $cloud,
+							'title' => $day.', '.$hour.':00 GMT<br>'.$cloud.'%'
+						));
+						array_push($humidityData,Array(
+							"value" => $humid,
+							"title" => $day.', '.$hour.':00 GMT<br>'.$humid.'%'
+						));
+					}
+				}
+				echo '<h4 class="text-center">Wind Speed</h4>';
+				showGraph($windData,'m/s',True,200,True);
+				echo '<h4 class="text-center mt-2">Cloud Cover</h4>';
+				showGraph($cloudData,'%',True,200,True);
+				echo '<h4 class="text-center mt-2">Humidity</h4>';
+				showGraph($humidityData,'%',True,200,True);
+				echo '</div>';
+
 				//script to enable tooltips
-				echo '<script>$("[data-toggle=\"tooltip\"]").tooltip()</script>';
+				echo '<script>$("[data-toggle=\"tooltip\"]").tooltip();';
+				echo '$(".graphDiv").scrollTo(1000,0)</script>';
 			}
 			else if(!$result){
 				showError("SQL Query Failed",mysqli_error($conn));
