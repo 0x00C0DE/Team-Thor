@@ -48,7 +48,7 @@
 			}
 
 			//render graph
-			echo '<div class="w-100 d-flex flex-row overflow-hidden">';
+			echo '<div class="w-auto mx-auto d-flex flex-row overflow-hidden">';
 			echo '<div class="d-flex flex-column justify-content-between mr-1">';
 			echo '<span class="text-dark">'.$max.$units.'</span>';
 			echo '<span class="text-body">'.$min.$units.'</span>';
@@ -133,7 +133,12 @@
 						CURLOPT_RETURNTRANSFER => 1
 					]);
 					$history = json_decode(curl_exec($curl));
-					array_push($hist, $history);	//add hourly data
+					if(!isset($history->{"hourly"})){	//check if good data was returned
+						//
+					}
+					else{
+						array_push($hist, $history);	//add hourly data
+					}
 				}
 
 				$tempData = Array();

@@ -1,39 +1,45 @@
 <?php
-if(isset($_SESSION["loggedin"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
+if(userIsLoggedIn() && $_SERVER["REQUEST_METHOD"] == "POST") {
 	require_once "./.dblogin.php";	//Make new session using POST
-	$conn = dbconnect();
 	$username = $_SESSION["user"];
 
 	$fields = Array("name","email","b_date");	//fields which may be updated by the user
 	foreach($fields as $field){
 		$value = clean_input($_POST[$field]);	//attempt to fetch field value
+
 		if(empty($value) == false){	//if a value was given, update the field in the db
-			$stmt = $conn->prepare("UPDATE Account SET ".$field."=? WHERE username=?");
-			$stmt->bind_param("ss", $value, $username);
-			$stmt->execute();
-			$stmt->close();
+			$query = "UPDATE Account SET ".$field;
+			$query .= "='".$value."' WHERE username='".$username."'";
+			//echo $query."<br>";
+			mysqli_query($conn,$query);
 		}
 	}
-	dbclose($conn);	//closes connection to database
-
-	header('location: profile.php');
-	exit;
+	
+	echo '<script>window.open("./profile.php","_self");</script>';//reload the page to show the changes
 }
 ?>
 
-<h2> Edit your Profile</h2>
-<form method="POST" action="edit_profile.php">
-	<div class="profile-page-update-input">
-		<label>Change Name: </label>                                  
-		<input type="text" name="name" value="<?php echo $name; ?>">
+<h3> Edit Your Profile</h3>
+<form method="POST" action="profile.php">
+	<div class="input-group mb-2">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Name</span>
+		</div>                                  
+		<input type="text" class="form-control" name="name" value="<?php echo $name; ?>">
 	</div>
-	<div class="profile-page-update-input">
-		<label> Change Email: </label>
-		<input type="email" name="email" value="<?php echo $email; ?>">
+	<div class="input-group mb-2">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Email</span>
+		</div>                                  
+		<input type="email" class="form-control" name="email" value="<?php echo $email; ?>">
 	</div>
-	<div class="profile-page-update-input">
-		<label>Change Birth Date: </label>
-		<input type="date" name="b_date" value="<?php echo $b_date; ?>">
+	<div class="input-group mb-2">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Birth Date</span>
+		</div>                                  
+		<input type="date" class="form-control" name="b_date" value="<?php echo $b_date; ?>">
 	</div>
-	<input type="submit" name="submit" value="Update Info" id="update-info-submit">
+	<div class="text-center">
+		<button class="btn btn-primary" type="submit">Update Info</button>
+	</div>
 </form>
