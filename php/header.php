@@ -27,11 +27,14 @@
 							array("Add Location By Coordinates","#","dropdown-item")
 						)
 					));
-					$sql = "SELECT name FROM Account WHERE username='" . $_SESSION['user'] . "'";
+					$sql = "SELECT name, aid FROM Account WHERE username='" . $_SESSION['user'] . "'";
 					$result = mysqli_query($conn,$sql);
 					if(mysqli_num_rows($result) == 1){
 						$row = mysqli_fetch_array($result);
 						array_push($navbarItems,array("Logged in as ".$row['name'],"./profile.php","nav-link"));
+						if($row['aid'] != null){
+							array_push($navbarItems,array("User List","./userlist.php","nav-link"));
+						}
 					}
 					array_push($navbarItems,array("Log Out","./logout.php","nav-link"));
 					$sqladmin = "SELECT aid FROM Account WHERE username = " . "'" .$_SESSION["user"] . "'";
