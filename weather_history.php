@@ -23,60 +23,6 @@
 			echo '</div>';
 		}
 
-		function showGraph(
-			$data,
-			$units,
-			$showMinMax=False,
-			$graphHeight=200,
-			$showMessage=True
-		){
-			//find minimum and maximum value
-			$min = 100000;
-			$max = -100000;
-			foreach($data as $dataPoint){
-				$min = min($min,$dataPoint["value"]);
-				$max = max($max,$dataPoint["value"]);
-			}
-			$scalingFactor = $graphHeight/($max - $min);
-
-			//render minimum and maximum table
-			if($showMinMax){
-				echo '<table class="table table-sm border-bottom w-auto mx-auto" style="min-width:50%">';
-				echo '<tr><td>Maximum</td><td>'.$max.$units.'</td></tr>';
-				echo '<tr><td>Minimum</td><td>'.$min.$units.'</td></tr>';
-				echo '</table>';
-			}
-
-			//render graph
-			echo '<div class="w-auto mx-auto d-flex flex-row overflow-hidden">';
-			echo '<div class="d-flex flex-column justify-content-between mr-1">';
-			echo '<span class="text-dark">'.$max.$units.'</span>';
-			echo '<span class="text-body">'.$min.$units.'</span>';
-			echo '</div>';
-			echo '<div class="flex-grow-1 d-flex flex-row py-2 overflow-auto align-items-end graphDiv" ';
-			echo 'style="-ms-overflow-style:none;scrollbar-width:none;">';
-			$i = 0;
-			foreach($data as $dataPoint){
-				$background = 'bg-info';
-				if($i % 24 == 0) $background = 'bg-dark';
-				echo '<div class="'.$background.' p-1 rounded" ';
-				echo 'data-toggle="tooltip" data-html="true" data-placement="bottom" title="';
-				echo $dataPoint["title"].'" ';
-				echo 'style="margin-right:2px;height:';
-				echo strval(($dataPoint["value"]-$min)*$scalingFactor).'">';
-				echo '</div>';
-				$i++;
-			}
-			echo '</div>';
-			echo '</div>';
-
-			//show message
-			if($showMessage){
-				echo '<div class="text-center text-muted">Some parts of the graph may be cut off, scroll ';
-				echo 'right to see them</div>';
-			}
-		}
-
 		if(isset($_GET["location"]) && userIsLoggedIn()){
 			//send query for location data
 			$query = "SELECT locations.name as name,lat,lon FROM locations ";
@@ -134,7 +80,7 @@
 					]);
 					$history = json_decode(curl_exec($curl));
 					if(!isset($history->{"hourly"})){	//check if good data was returned
-						//
+						//bad data was returned
 					}
 					else{
 						array_push($hist, $history);	//add hourly data
@@ -188,12 +134,7 @@
 					foreach($hist as $dayHist){
 						$weatherDescrip = $dayHist->{"hourly"}[$i]->{"weather"}[0]->{"description"};
 						$weather_id = $dayHist->{"hourly"}[$i]->{"weather"}[0]->{"id"};
-						if($weather_id < 300) $weatherIcon = "./Icons/Thunderstorm.png";	//thunderstorms
-						else if($weather_id < 600) $weatherIcon = "./Icons/Rain.png";	//drizzle & rain
-						else if($weather_id < 700) $weatherIcon = "./Icons/Snow.png";	//snow
-						else if($weather_id < 800) $weatherIcon = "";	//atmospheric conditions
-						else if($weather_id < 801) $weatherIcon = "./Icons/Sun.png";	//clear
-						else $weatherIcon = "./Icons/Cloud.png";	//cloudy
+						$weatherIcon = getIconFromWeatherCode($weather_id);
 						echo '<td class="text-center" title="'.$weatherDescrip.'">';
 						echo '<img class="img-fluid" src="'.$weatherIcon.'" style="max-height:25px">';
 						echo '</td>';

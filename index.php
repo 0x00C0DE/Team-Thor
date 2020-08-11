@@ -101,12 +101,7 @@
 						//parse api results
 						$day_forecast = $daily_forecast[$j];
 						$weather_id = $day_forecast->{"weather"}[0]->{"id"};
-						if($weather_id < 300) $weather_icon = "./Icons/Thunderstorm.png";	//thunderstorms
-						else if($weather_id < 600) $weather_icon = "./Icons/Rain.png";	//drizzle & rain
-						else if($weather_id < 700) $weather_icon = "./Icons/Snow.png";	//snow
-						else if($weather_id < 800) $weather_icon = "";	//atmospheric conditions
-						else if($weather_id < 801) $weather_icon = "./Icons/Sun.png";	//clear
-						else $weather_icon = "./Icons/Cloud.png";	//cloudy
+						$weather_icon = getIconFromWeatherCode($weather_id);
 						echo '<div class="card flex-fill m-1 overflow-hidden day-forecast-card">';
 						//day name
 						$day = date("l",$day_forecast->{"dt"}+0);
@@ -235,6 +230,12 @@
 						echo '<div class="d-flex flex-row overflow-hidden align-items-center" title="UV index">';
 						echo '<img class="img-fluid half" src="./Icons/Sun.png">';
 						echo '<div class="mx-1 flex-fill text-center">'.$uvi.'</div>';
+						echo '</div>';
+						//button to view hourly forecast for the day
+						echo '<div class="p-1 text-center">';
+						echo '<a href="./hourly.php?location=\''.$location["name"];
+						echo '\'&date=\''.date("Y-m-d",$day_forecast->{"dt"});
+						echo '\'" class="btn btn-secondary">View Hourly Forecast</a>';
 						echo '</div>';
 						//close divs
 						echo '</div></div>';
