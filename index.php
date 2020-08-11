@@ -231,12 +231,14 @@
 						echo '<img class="img-fluid half" src="./Icons/Sun.png">';
 						echo '<div class="mx-1 flex-fill text-center">'.$uvi.'</div>';
 						echo '</div>';
-						//button to view hourly forecast for the day
-						echo '<div class="p-1 text-center">';
-						echo '<a href="./hourly.php?location=\''.$location["name"];
-						echo '\'&date=\''.date("Y-m-d",$day_forecast->{"dt"});
-						echo '\'" class="btn btn-secondary">View Hourly Forecast</a>';
-						echo '</div>';
+						if($j < 3){
+							//button to view hourly forecast for the day
+							echo '<div class="p-1 text-center">';
+							echo '<a href="./hourly.php?location='.$location["name"];
+							echo '&date='.date("Y-m-d",$day_forecast->{"dt"});
+							echo '" class="btn btn-secondary">View Hourly Forecast</a>';
+							echo '</div>';
+						}
 						//close divs
 						echo '</div></div>';
 					}
