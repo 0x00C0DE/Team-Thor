@@ -6,6 +6,10 @@
  $err = array();
  if($_SERVER["REQUEST_METHOD"] == "POST") {
 
+	/*
+	cleans the input of name, username, email, bdate, pwrd when the user enters in invalid input into one of those several fields. If one of the field are empty upon submission,
+	all fields will be cleaned of input. 
+	*/
 	  $name = clean_input($_POST["name"]);
 	  if(empty($name)) {
 		 array_push($err, "nameempty");
@@ -31,6 +35,7 @@
 		 array_push($err, "pwrdempty");
 
 	  }
+	  //The pwrd variable is hashed when entered in and sent to the database. This way it will protect against certain tech-savy individuals from doing any basic forms of sql injections
 	  $pwrd = password_hash(clean_input($_POST["pwrd"]), PASSWORD_DEFAULT);
 
 	  if(!(password_verify(clean_input($_POST["conf-pwrd"]), $pwrd))) {
@@ -40,6 +45,7 @@
 	  if(!sizeof($err)) {
 		  $conn = dbconnect();
 
+		//If all inputs are valid, continue to package the variables into a query to be sent and stored in the database.
 		  $stmt = $conn->prepare("INSERT INTO Account (username, email, psswrd, b_date, name) VALUES (?, ?, ?, ?, ?)");
 		  $stmt->bind_param("sssss", $username, $email, $pwrd, $bdate, $name);
 
@@ -82,6 +88,9 @@
 		<div class="py-2">
 			<h2 class="text-center">Create Account</h2>
 		</div>
+				<!-- 
+					Input fields, checking for any fields that are left empty via "required" status for the input fields below.
+				-->
 		<div class="create-account flex-grow-1">
 			<form method="post" class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 				<div class="create-account-input form-group">
