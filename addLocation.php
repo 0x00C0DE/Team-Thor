@@ -1,18 +1,17 @@
 <?php
 
-
-
-
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){	//check if user is logged in
+		$success = false;
+		$error = false;
+		$err = array();
 		//connect to db
 		require_once "../.dblogin.php";
-		$con = dbconnect();		
-		if($_SERVER["REQUEST_METHOD"] == "POST") {
-			/*
-			cleans the input of name, username, email, bdate, pwrd when the user enters in invalid input into one of those several fields. If one of the field are empty upon submission,
-			all fields will be cleaned of input. 
-			*/
+		$con = dbconnect();
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+			/* cleans the input of name, latitude, longitude when the user enters in invalid input into one of those several fields. If one of the field are empty upon submission,
+			all fields will be cleaned of input. The way I envision this working is an XMLHttp request is passed to the api returning a json file
+			With Name, lat, and lon recorded. a secondary XMLHttp request then occurs passing that data to the php variables */
 			$name = clean_input($_POST["name"]);
 			if(empty($name)) {
 				array_push($err, "nameempty");
@@ -37,9 +36,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 			$stmt->close();
 			dbclose($conn);
 		}
+		if($success){
+			header('location: index.php');
+			exit;
+		}
 	}
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,8 +64,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				name = data.name;
 				lat = data.coord.lat;
 				lon = data.coord.lon;
+				sendPhp(name, lat, lon);
 				event.preventDefault();
-			})
+			});
 			document.getElementById("zip-location-submit").addEventListener("click", function(event){
 				var apiKey = "f10f1cf3299eadede2bbce70765881e2";
 				var zip = document.getElementById('zip').value;
@@ -75,8 +78,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				name = data.name;
 				lat = data.coord.lat;
 				lon = data.coord.lon;
+				sendPhp(name, lat, lon);
 				event.preventDefault();
-			})
+			});
 			document.getElementById("city-location-submit").addEventListener("click", function(event){
 				var apiKey = "f10f1cf3299eadede2bbce70765881e2";
 				var city = document.getElementById('city').value;
@@ -87,11 +91,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				name = data.name;
 				lat = data.coord.lat;
 				lon = data.coord.lon;
+				sendPhp(name, lat, lon);
 				event.preventDefault();
-			})
+			});
 		}
-		
-		
+		//This function send the values in name, lat, & lon to the variables in the php file. form (html)->javascript->php->database
+		function sendPhp(name, lat, lon){
+			var req = new XMLHttpRequest();
+			var send = document.getElementById('input').value;
+			req.open("POST", "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>", false);
+			req.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+			req.send("name=" + name + "&lat=" + lat + "&lon=" + lon);
+			var sendData = req.responseText;
+			console.log(sendData);
+			event.preventDefault();
+		}
 	</script> 
 </head>
 <body>
@@ -104,7 +118,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 			<h2 class="text-center">Add Location by Longitude & Latitude</h2>
 		</div>
 		<div class="create-account flex-grow-1">
-			<form method="post" class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+			<form method="post" class="col-md-7 mx-auto pb-3">
 				<div class="create-account-input form-group">
 					<label for="lat">Latitude:</label><br>
 					<input id="lat" type="text" class="form-control" name="lat" required>
@@ -126,7 +140,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 			<h2 class="text-center">Add Location by zipcode</h2>
 		</div>
 		<div class="create-account flex-grow-1">
-			<form method="post" class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+			<form method="post" class="col-md-7 mx-auto pb-3">
 				<div class="create-account-input form-group">
 					<label for="zip">Zipcode:</label>
 					<input id = "zip" type="text"  class="form-control" name="zip" required>
@@ -144,7 +158,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 			<h2 class="text-center">Add Location by City Name</h2>
 		</div>
 		<div class="create-account flex-grow-1">
-			<form method="post" class="col-md-7 mx-auto pb-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+			<form method="post" class="col-md-7 mx-auto pb-3">
 				<div class="create-account-input form-group">
 					<label for="city">City Name:</label>
 					<input id="city" type="text"  class="form-control" name="city" required>
