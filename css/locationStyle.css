@@ -1,0 +1,10 @@
+[data-toggle="collapse"].collapsed::before{
+	content: "+";
+	font-weight: bold;
+}
+
+[data-toggle="collapse"]:not(.collapsed)::before{
+	content: "-";
+	font-weight: bold;
+}
+

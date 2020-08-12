@@ -1,4 +1,6 @@
 <?php
+session_save_path("./sessionDir");
+session_start();
 //connect to db
 require_once "../.dblogin.php";
 $conn = dbconnect();
