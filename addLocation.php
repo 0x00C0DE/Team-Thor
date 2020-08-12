@@ -1,13 +1,13 @@
 <?php
+//connect to db
+require_once "../.dblogin.php";
+$conn = dbconnect();
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){	//check if user is logged in
 		$success = false;
 		$error = false;
 		$err = array();
-		//connect to db
-		require_once "../.dblogin.php";
-		$con = dbconnect();
 		if($_SERVER["REQUEST_METHOD"] == "POST"){
 			/* cleans the input of name, latitude, longitude when the user enters in invalid input into one of those several fields. If one of the field are empty upon submission,
 			all fields will be cleaned of input. The way I envision this working is an XMLHttp request is passed to the api returning a json file
@@ -18,14 +18,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 			}
 			$lat = clean_input($_POST["lat"]);
 			if(empty($lat)) {
-				array_push($err, "latempty")
+				array_push($err, "latempty");
 			}
 			$lon =clean_input($_POST["lon"]);
 			if(empty($lon)) {
 				array_push($err, "lonempty");
 			}
-			$username = mysqli_real_escape_string($con,$_SESSION["user"]);
-			$query = SELECT lid FROM Account WHERE username='".$username."')
+			$username = mysqli_real_escape_string($conn,$_SESSION["user"]);
+			$query = "SELECT lid FROM Account WHERE username='".$username."'";
 			$user_lid = mysql_query( $sql, $conn );
 			//If all inputs are valid, continue to package the variables into a query to be sent and stored in the database.
 			$stmt = $conn->prepare("INSERT INTO locations (name, user_lid, lat, lon) VALUES (?, ?, ?, ?)");
@@ -34,7 +34,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				$success = true;
 			}
 			$stmt->close();
-			dbclose($conn);
 		}
 		if($success){
 			header('location: index.php');
@@ -112,6 +111,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 	<?php
 	//include header
 	include_once "./php/header.php";
+	dbclose($conn);
 	?>
 	<div class="container-md mx-auto my-3 d-flex flex-column card bg-light">
 		<div class="py-2">
