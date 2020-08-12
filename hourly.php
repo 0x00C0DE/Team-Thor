@@ -91,7 +91,7 @@
 				$lowestIndex = array_keys($hourlyData)[0];
 				echo '<h1 class="text-center">'.date("l",$hourlyData[$lowestIndex]->{"dt"}).'</h1>';	//title
 				echo '<div class="overflow-auto">';
-				echo '<table class="table table-sm">';
+				echo '<table class="table table-sm table-bordered">';
 				echo '<tr>';
 				echo '<th>Time</th>';
 				echo '<th>Weather</th>';

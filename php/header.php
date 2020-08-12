@@ -32,8 +32,9 @@
 					if(mysqli_num_rows($result) == 1){
 						$row = mysqli_fetch_array($result);
 						array_push($navbarItems,array("Logged in as ".$row['name'],"./profile.php","nav-link"));
-						if($row['aid'] != null){
+						if($row['aid'] != null){	//check if user is an admin
 							array_push($navbarItems,array("User List","./userlist.php","nav-link"));
+							array_push($navbarItems,array("User's Locations","./locations.php","nav-link"));
 						}
 					}
 					array_push($navbarItems,array("Log Out","./logout.php","nav-link"));
