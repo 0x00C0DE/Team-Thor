@@ -22,9 +22,9 @@
 						"#",
 						"dropdown-toggle",
 						array(
-							array("Add Location By City Name","#","dropdown-item"),
-							array("Add Location By Postal Code","#","dropdown-item"),
-							array("Add Location By Coordinates","#","dropdown-item")
+							array("Add Location By City Name","./addLocation.php","dropdown-item"),
+							array("Add Location By Postal Code","./addLocation.php","dropdown-item"),
+							array("Add Location By Coordinates","./addLocation.php","dropdown-item")
 						)
 					));
 					$sql = "SELECT name FROM Account WHERE username='" . $_SESSION['user'] . "'";
