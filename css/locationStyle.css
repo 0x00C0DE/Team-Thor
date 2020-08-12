@@ -1,0 +1,10 @@
+.userListToggleButton.collapsed::before{
+	content: "+";
+	font-weight: bold;
+}
+
+.userListToggleButton:not(.collapsed)::before{
+	content: "-";
+	font-weight: bold;
+}
+

@@ -19,13 +19,8 @@
 				else if($_SESSION["loggedin"] === true){	//user is logged in
 					array_push($navbarItems,array(
 						"Add New Location",
-						"#",
-						"dropdown-toggle",
-						array(
-							array("Add Location By City Name","./addLocation.php","dropdown-item"),
-							array("Add Location By Postal Code","./addLocation.php","dropdown-item"),
-							array("Add Location By Coordinates","./addLocation.php","dropdown-item")
-						)
+						"./addLocation.php",
+						"nav-link"
 					));
 					$sql = "SELECT name, aid FROM Account WHERE username='" . $_SESSION['user'] . "'";
 					$result = mysqli_query($conn,$sql);

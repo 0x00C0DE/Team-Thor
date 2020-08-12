@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 12, 2020 at 04:44 PM
+-- Generation Time: Aug 12, 2020 at 11:20 PM
 -- Server version: 10.4.13-MariaDB-log
 -- PHP Version: 7.4.7
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `cs361_haggerto`
 --
-CREATE DATABASE IF NOT EXISTS `cs361_haggerto` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `cs361_haggerto`;
 
 -- --------------------------------------------------------
 
@@ -63,6 +61,7 @@ INSERT INTO `Account` (`username`, `psswrd`, `aid`, `email`, `b_date`, `name`, `
 --
 
 CREATE TABLE `locations` (
+  `location_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `user_lid` int(255) NOT NULL,
   `lat` varchar(9) NOT NULL,
@@ -74,9 +73,10 @@ CREATE TABLE `locations` (
 -- Dumping data for table `locations`
 --
 
-INSERT INTO `locations` (`name`, `user_lid`, `lat`, `lon`, `is_subscribed`) VALUES
-('Corvallis', 5, '44.5781', '-123.2752', 'YES'),
-('New York', 5, '40.7143', '-74.0060', 'NO');
+INSERT INTO `locations` (`location_id`, `name`, `user_lid`, `lat`, `lon`, `is_subscribed`) VALUES
+(1, 'Corvallis', 5, '44.5781', '-123.2752', 'YES'),
+(2, 'New York', 5, '40.7143', '-74.0060', 'NO'),
+(3, 'Albany', 1, '44.6367', '-123.1047', 'NO');
 
 --
 -- Indexes for dumped tables
@@ -95,6 +95,7 @@ ALTER TABLE `Account`
 -- Indexes for table `locations`
 --
 ALTER TABLE `locations`
+  ADD PRIMARY KEY (`location_id`),
   ADD KEY `user_lid` (`user_lid`);
 
 --
@@ -106,6 +107,12 @@ ALTER TABLE `locations`
 --
 ALTER TABLE `Account`
   MODIFY `lid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `locations`
+--
+ALTER TABLE `locations`
+  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
