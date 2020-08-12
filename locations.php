@@ -146,8 +146,8 @@
 					//show collapsable list of users
 					echo '<td class="text-center">';
 					$userListId = 'userList'.$loc["location_id"];
-					echo '<button class="btn btn-info px-2 py-0 collapsed" data-toggle="collapse" ';
-					echo 'data-target="#'.$userListId.'" type="button"></button>';
+					echo '<button class="btn btn-info px-2 py-0 collapsed userListToggleButton" ';
+					echo 'data-toggle="collapse" data-target="#'.$userListId.'" type="button"></button>';
 					echo '<ul class="collapse text-left" id="'.$userListId.'">';
 					echo '<li>'.$loc["username"].'</li>';
 					foreach($loc["neighbors"] as $neighbor){
