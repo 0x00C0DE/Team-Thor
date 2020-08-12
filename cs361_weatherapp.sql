@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 27, 2020 at 01:39 AM
+-- Generation Time: Aug 12, 2020 at 04:44 PM
 -- Server version: 10.4.13-MariaDB-log
 -- PHP Version: 7.4.7
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `cs361_haggerto`
 --
+CREATE DATABASE IF NOT EXISTS `cs361_haggerto` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `cs361_haggerto`;
 
 -- --------------------------------------------------------
 
@@ -34,21 +36,25 @@ CREATE TABLE `Account` (
   `email` varchar(255) NOT NULL,
   `b_date` date NOT NULL,
   `name` varchar(255) NOT NULL,
-  `lid` int(255) NOT NULL
+  `lid` int(255) NOT NULL,
+  `locMax` int(11) NOT NULL DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `Account`
 --
 
-INSERT INTO `Account` (`username`, `psswrd`, `aid`, `email`, `b_date`, `name`, `lid`) VALUES
-('AdminTest', 'test987', '1', 'test12@test.testwork', '2020-07-11', 'yessir', 1),
-('shadowbarker', 'darkness1', NULL, 'okok@yesyes.cool', '2020-05-13', 'bil', 2),
-('lightbringer', 'holyone0', NULL, 'tippytop@one.two', '2020-03-08', 'kyle', 3),
-('avidgamer', 'funzi', NULL, 'gumgum@three.tree', '2020-01-03', 'cucumber', 4),
-('test', '$2y$10$TlDCTUSLYPzfxhhfz.8Jf.ox5A.IAX8XAP79Cb8KL.9UTdZX7ZT0q', NULL, 'haggerto@oregonstate.edu', '1970-01-01', 'Logged In', 5),
-('test2', '$2y$10$0ba0T7A5dZb.cbZ51.EX/uLV0RO50wdk30.mmZZdxwYdeBikc3Boe', NULL, 'email@test.com', '1970-01-01', 'Test Account 2', 6),
-('tester1', '$2y$10$XkqZQyst0NuOjPuzxft0wexEeiQRaV6OwrVoIy2/9sSJh1/jxr002', NULL, 'test@gmail.com', '2020-08-04', 'tester1', 7);
+INSERT INTO `Account` (`username`, `psswrd`, `aid`, `email`, `b_date`, `name`, `lid`, `locMax`) VALUES
+('AdminTest', 'test987', '1', 'test12@test.testwork', '2020-07-11', 'yessir', 1, 5),
+('shadowbarker', 'darkness1', NULL, 'okok@yesyes.cool', '2020-05-13', 'bil', 2, 5),
+('lightbringer', 'holyone0', NULL, 'tippytop@one.two', '2020-03-08', 'kyle', 3, 5),
+('avidgamer', 'funzi', NULL, 'gumgum@three.tree', '2020-01-03', 'cucumber', 4, 5),
+('test', '$2y$10$TlDCTUSLYPzfxhhfz.8Jf.ox5A.IAX8XAP79Cb8KL.9UTdZX7ZT0q', '2', 'haggerto@oregonstate.edu', '1970-01-01', 'Test User', 5, 5),
+('tester1', '$2y$10$XkqZQyst0NuOjPuzxft0wexEeiQRaV6OwrVoIy2/9sSJh1/jxr002', NULL, 'test@gmail.com', '2020-08-04', 'tester1', 7, 5),
+('princeri', '$2y$10$q7y7NEQbloMIoL7fx6EMc.PEAaGNkJY8me6h0hB2U5sFO4AJmhUqi', NULL, 'princeri@oregonstate.edu', '1998-04-17', 'Riley Prince', 8, 5),
+('tester5', '$2y$10$ejVwXYrO71iGUfJ6zDPq8.7zefDyLYvPz59.kT67ARJZ9dSImR5ce', NULL, 'lol@gg.net', '2020-07-09', 'okgg', 11, 5),
+('tester2', '$2y$10$Z5KNaShMR6gAlOSrDD8vueZv/znkbmE6bMsPSDNfvUFeyJRlQ79XG', NULL, 'ok@gg.com', '2020-07-02', 'testcreate', 12, 5),
+('tester3', '$2y$10$6nLncJxHPfPvN11.PLtE3u1GyjupIWlo3tLKx8dNnW8xW4lJ5Ugne', NULL, 'ok@gg.net', '2020-07-25', 'timber', 13, 5);
 
 -- --------------------------------------------------------
 
@@ -99,7 +105,7 @@ ALTER TABLE `locations`
 -- AUTO_INCREMENT for table `Account`
 --
 ALTER TABLE `Account`
-  MODIFY `lid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `lid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -111,16 +117,6 @@ ALTER TABLE `Account`
 ALTER TABLE `locations`
   ADD CONSTRAINT `locations_ibfk_1` FOREIGN KEY (`user_lid`) REFERENCES `Account` (`lid`);
 COMMIT;
-
---
--- added column to table `account`
-ALTER TABLE Acccount
-  ADD locMax int(11);
-
---
--- removed Constraints for aid on table `account`
-ALTER TABLE Account
-  DROP INDEX aid;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
