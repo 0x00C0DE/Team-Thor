@@ -43,11 +43,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 		}
 	}
 }
-else{
-	echo '<script language="javascript">';
-	echo 'alert("There is an issue with the OpenAPI server Please try again later")';
-	echo '</script>';
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
