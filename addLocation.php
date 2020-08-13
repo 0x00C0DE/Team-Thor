@@ -5,7 +5,7 @@ session_start();
 require_once "../.dblogin.php";
 $conn = dbconnect();
 
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){	//check if user is logged in
 		$success = false;
 		$error = false;
