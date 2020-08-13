@@ -28,7 +28,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 			}
 			$username = mysqli_real_escape_string($conn,$_SESSION["user"]);
 			$query = "SELECT lid FROM Account WHERE username='".$username."'";
-			$user_lid = mysql_query( $sql, $conn );
+			$res = mysqli_query($conn,$query); 
+			$user_lid = mysqli_fetch_array($res)["lid"];
 			//If all inputs are valid, continue to package the variables into a query to be sent and stored in the database.
 			$stmt = $conn->prepare("INSERT INTO locations (name, user_lid, lat, lon) VALUES (?, ?, ?, ?)");
 			$stmt->bind_param("ssss", $name, $user_lid, $lat, $lon);
