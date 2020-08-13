@@ -265,10 +265,11 @@
 			echo '<h2 class="text-center">';
 			echo 'You are not logged in</h2>';
 			echo '<h5 class="text-center">';
-			echo 'You must be logged in to log in to view weather forecasts';
+			echo 'You must be logged in to view weather forecasts';
 			echo '</h5>';
 			echo '<div class="d-flex flex-row justify-content-center">';
 			echo '<a href="./login.php" class="btn btn-primary">Log In</a>';
+			echo '<a href="./create_account.php" class="btn btn-primary">Create Account</a>';
 			echo '</div>';
 			echo '</div>';
 		}
