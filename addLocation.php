@@ -60,7 +60,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				console.log("userInput: " + lat + " " + lon);
 				var req = new XMLHttpRequest();
 				console.log("userInput: " + lat + ", " + lon);
-				req.open("GET", "api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, false);
+				req.open("GET", "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, false);
 				req.send(null);	
 				var data = JSON.parse(req.responseText);
 				//name = data.name;
@@ -89,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				var city = document.getElementById('city').value;
 				var req = new XMLHttpRequest();
 				console.log("userInput: " + city);
-				req.open("GET", "api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey, false);
+				req.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey, false);
 				req.send(null);	
 				var data = JSON.parse(req.responseText);
 				//name = data.name;
