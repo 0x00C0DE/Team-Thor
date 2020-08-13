@@ -37,10 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 				$success = true;
 			}
 			$stmt->close();
-		}
-		if($success){
-			header('location: index.php');
-			exit;
+			die();
 		}
 	}
 }
@@ -97,7 +94,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 				//lat = data.coord.lat;
 				//lon = data.coord.lon;
 				sendPhp(data.name, data.coord.lat, data.coord.lon);
-				event.preventDefault();
 			});
 		}
 		//This function send the values in name, lat, & lon to the variables in the php file. form (html)->javascript->php->database
@@ -107,9 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 			req.open("POST", "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>", false);
 			req.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
 			req.send("name=" + name + "&lat=" + lat + "&lon=" + lon);
-			var sendData = req.responseText;
-			console.log(sendData);
-			event.preventDefault();
+			window.open("./index.php","_self");
 		}
 	</script> 
 </head>
@@ -134,7 +128,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 					<input id="lon" type="text" class="form-control" name="lon" required>
 				</div>
 				<div class="d-flex flex-row justify-content-around">
-					<input type="submit" value="addLatLon" id="latlon-location-submit"
+					<input type="submit" value="Add Coordinates" id="latlon-location-submit"
 						class="btn btn-primary">
 					<a href="./index.php" class="btn btn-secondary">Cancel</a>
 				</div>
@@ -152,7 +146,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 					<input id = "zip" type="text"  class="form-control" name="zip" required>
 				</div>
 				<div class="d-flex flex-row justify-content-around">
-					<input type="submit" value="addZip" id="zip-location-submit"
+					<input type="submit" value="Add Zip Code" id="zip-location-submit"
 						class="btn btn-primary">
 					<a href="./index.php" class="btn btn-secondary">Cancel</a>
 				</div>
@@ -170,7 +164,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 					<input id="city" type="text"  class="form-control" name="city" required>
 				</div>
 				<div class="d-flex flex-row justify-content-around">
-					<input type="submit" value="addCity" id="city-location-submit"
+					<input type="submit" value="Add City" id="city-location-submit"
 						class="btn btn-primary">
 					<a href="./index.php" class="btn btn-secondary">Cancel</a>
 				</div>
