@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				var apiKey = "f10f1cf3299eadede2bbce70765881e2";
 				var lat = document.getElementById('lat').value;
 				var lon = document.getElementById('lon').value;
-				console.log("userInput: " + zip + " " + country);
+				console.log("userInput: " + lat + " " + lon);
 				var req = new XMLHttpRequest();
 				req.open("GET", "api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, false);
 				req.send(null);	
@@ -73,6 +73,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				var zip = document.getElementById('zip').value;
 				var country = "us";
 				var req = new XMLHttpRequest();
+				console.log("userInput: " + zip + ", " + country);
 				req.open("GET", "https://api.openweathermap.org/data/2.5/weather?zip=" + zip + "," + country + "&appid=" + apiKey, false);
 				req.send(null);	
 				var data = JSON.parse(req.responseText);
@@ -99,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 		//This function send the values in name, lat, & lon to the variables in the php file. form (html)->javascript->php->database
 		function sendPhp(name, lat, lon){
 			var req = new XMLHttpRequest();
-			var send = document.getElementById('input').value;
+			//var send = document.getElementById('input').value;    //I'm pretty sure this isn't needed and elads to errors
 			req.open("POST", "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>", false);
 			req.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
 			req.send("name=" + name + "&lat=" + lat + "&lon=" + lon);
