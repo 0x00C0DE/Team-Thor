@@ -10,7 +10,7 @@
 	require_once "./php/meta.php";
 	
 	//the minimum distance in kilometers between locations to be considered a neighbor
-	const MIN_DIST = 25;
+	const MIN_DIST = 2.5;
 
 	//the radius of earth in kilometers
 	const EARTH_RAD = 6371;

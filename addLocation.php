@@ -94,6 +94,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["name"])){
 				//lat = data.coord.lat;
 				//lon = data.coord.lon;
 				sendPhp(data.name, data.coord.lat, data.coord.lon);
+				event.preventDefault();
 			});
 		}
 		//This function send the values in name, lat, & lon to the variables in the php file. form (html)->javascript->php->database

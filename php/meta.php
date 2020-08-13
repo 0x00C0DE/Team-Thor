@@ -53,7 +53,7 @@ function showGraph(
 	}
 
 	//render graph
-	echo '<div class="w-auto mx-auto d-flex flex-row overflow-hidden">';
+	echo '<div class="w-auto mx-auto d-flex flex-row overflow-hidden" style="max-width:100%">';
 	echo '<div class="d-flex flex-column justify-content-between mr-1">';
 	echo '<span class="text-dark">'.$max.$units.'</span>';
 	echo '<span class="text-body">'.$min.$units.'</span>';
