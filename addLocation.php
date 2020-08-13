@@ -59,13 +59,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				var lon = document.getElementById('lon').value;
 				console.log("userInput: " + lat + " " + lon);
 				var req = new XMLHttpRequest();
+				console.log("userInput: " + lat + ", " + lon);
 				req.open("GET", "api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, false);
 				req.send(null);	
 				var data = JSON.parse(req.responseText);
-				name = data.name;
-				lat = data.coord.lat;
-				lon = data.coord.lon;
-				sendPhp(name, lat, lon);
+				//name = data.name;
+				//lat = data.coord.lat;
+				//lon = data.coord.lon;
+				sendPhp(data.name, data.lat, data.lon);
 				event.preventDefault();
 			});
 			document.getElementById("zip-location-submit").addEventListener("click", function(event){
@@ -77,23 +78,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				req.open("GET", "https://api.openweathermap.org/data/2.5/weather?zip=" + zip + "," + country + "&appid=" + apiKey, false);
 				req.send(null);	
 				var data = JSON.parse(req.responseText);
-				name = data.name;
-				lat = data.coord.lat;
-				lon = data.coord.lon;
-				sendPhp(name, lat, lon);
+				//name = data.name;
+				//lat = data.coord.lat;
+				//lon = data.coord.lon;
+				sendPhp(data.name, data.coord.lat, data.coord.lon);
 				event.preventDefault();
 			});
 			document.getElementById("city-location-submit").addEventListener("click", function(event){
 				var apiKey = "f10f1cf3299eadede2bbce70765881e2";
 				var city = document.getElementById('city').value;
 				var req = new XMLHttpRequest();
+				console.log("userInput: " + city);
 				req.open("GET", "api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey, false);
 				req.send(null);	
 				var data = JSON.parse(req.responseText);
-				name = data.name;
-				lat = data.coord.lat;
-				lon = data.coord.lon;
-				sendPhp(name, lat, lon);
+				//name = data.name;
+				//lat = data.coord.lat;
+				//lon = data.coord.lon;
+				sendPhp(data.name, data.coord.lat, data.coord.lon);
 				event.preventDefault();
 			});
 		}
