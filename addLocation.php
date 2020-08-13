@@ -127,7 +127,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["location_name"])){
 				</div>
 				<div class="create-account-input form-group" id="create-account-email">
 					<label for="lon">Longitude:</label><br>
-					<input id="lon" type="email" class="form-control" name="lon" required>
+					<input id="lon" type="text" class="form-control" name="lon" required>
 				</div>
 				<div class="d-flex flex-row justify-content-around">
 					<input type="submit" value="addLatLon" id="latlon-location-submit"
